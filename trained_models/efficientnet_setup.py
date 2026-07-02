@@ -169,7 +169,7 @@ DATASET_STD  = [0.2509, 0.2472, 0.2625]
 
 CLASSES = [
     "adobo", "amok_trey", "banh_mi", "hainanese_chicken_rice",
-    "laksa", "mohinga", "nasi_goreng", "pad_thai", "pho", "satay"
+    "laksa", "laphet_thoke", "nasi_goreng", "pad_thai", "pho", "satay"
 ]
 
 # Training hyperparameters
