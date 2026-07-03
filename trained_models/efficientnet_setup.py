@@ -218,7 +218,7 @@ def run_training():
             brightness=0.4,
             contrast=0.3,
             saturation=0.3,
-            hue=0.08          # subtle hue shift; too high confuses food colors
+            hue=0.02         # subtle hue shift; too high confuses food colors
         ),
         transforms.RandomGrayscale(p=0.03),  # rare; teaches robustness
         transforms.ToTensor(),
@@ -275,7 +275,8 @@ def run_training():
     # but adding class weights to the loss adds a second layer of robustness
     class_weight_vals = torch.tensor(
         [1.0 / class_counts[i] for i in range(10)], dtype=torch.float
-    )
+    ) 
+    class_weight_vals[1] *= 1.5  # amok_trey is visually similar to laksa; boost its weight
     class_weight_vals = class_weight_vals / class_weight_vals.sum() * 10  # normalize
     criterion = nn.CrossEntropyLoss(weight=class_weight_vals.to(device))
 
