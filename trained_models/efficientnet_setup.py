@@ -22,9 +22,6 @@ from collections import Counter
 # STEP 1 — DATASET CLEANUP
 # ─────────────────────────────────────────────
 
-# 46 near-duplicate images that appear in BOTH train AND val/test
-# These cause data leakage — the model sees test images during training,
-# inflating accuracy scores artificially. Remove them from val/test.
 LEAKAGE_FILES = [
     "dataset/test/adobo/adobo_abdd95cb37b4.jpg",
     "dataset/test/adobo/adobo_ae8b86621894.jpg",
@@ -107,8 +104,6 @@ GRAYSCALE_IMAGES = [
     "dataset/test/mohinga/mohinga_81067122e8b4.jpg",
 ]
 
-# 1 cross-class mislabel — visually identical image in two different classes
-# Inspect both manually and delete whichever is incorrectly labeled
 MISLABELS = [
     ("dataset/train/adobo/adobo_0d58d56e926e.jpg",
      "dataset/train/laksa/laksa_d76548fc9d4d.jpg"),
