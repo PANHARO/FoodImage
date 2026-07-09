@@ -27,7 +27,6 @@ def upscale_and_sharpen(img, target_size=640):
 def denoise(img):
     return cv2.fastNlMeansDenoisingColored(img, None, h=5, hColor=5, templateWindowSize=7, searchWindowSize=21)
 
-
 def normalize_exposure(img):
     lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
     l, a, b = cv2.split(lab)
