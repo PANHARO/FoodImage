@@ -1,9 +1,4 @@
-"""
-Preprocessing script for a Roboflow YOLO export
-
-Only touches images (denoise, exposure normalize, sharpen, proportional
-upscale).
-"""
+"""Preprocess a Roboflow YOLO export without changing its annotations."""
 
 import argparse
 import shutil
@@ -12,6 +7,7 @@ import cv2
 
 
 def upscale_and_sharpen(img, target_size=640):
+    """Upscale small images proportionally, then apply mild sharpening."""
     h, w = img.shape[:2]
     scale = target_size / max(h, w)
 
@@ -25,9 +21,14 @@ def upscale_and_sharpen(img, target_size=640):
 
 
 def denoise(img):
-    return cv2.fastNlMeansDenoisingColored(img, None, h=5, hColor=5, templateWindowSize=7, searchWindowSize=21)
+    """Remove color noise while preserving most image edges."""
+    return cv2.fastNlMeansDenoisingColored(
+        img, None, h=5, hColor=5, templateWindowSize=7, searchWindowSize=21
+    )
+
 
 def normalize_exposure(img):
+    """Improve local contrast using CLAHE on the luminance channel."""
     lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
     l, a, b = cv2.split(lab)
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))

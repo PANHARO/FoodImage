@@ -4,13 +4,18 @@ import argparse
 from collections import Counter
 from pathlib import Path
 
+try:
+    from .metrics import save_evaluation_plots, save_training_history
+except ImportError:  # Support: python trained_models/mobilenet.py
+    from metrics import save_evaluation_plots, save_training_history
+
 DATA_ROOT = Path("dataset")
-MODEL_PATH = Path("best_mobilenet_v2_model.pth")
+MODEL_PATH = Path("trained_models/checkpoints/best_mobilenet_v2_model.pth")
 DATASET_MEAN = [0.5588, 0.4799, 0.3743]
 DATASET_STD = [0.2509, 0.2472, 0.2625]
 CLASSES = [
     "adobo", "amok_trey", "banh_mi", "hainanese_chicken_rice", "laksa",
-    "mohinga", "nasi_goreng", "pad_thai", "pho", "satay",
+    "laphet_thoke", "nasi_goreng", "pad_thai", "pho", "satay",
 ]
 
 BATCH_SIZE = 32
@@ -96,7 +101,7 @@ def evaluate_accuracy(model, loader, device):
 
 
 def train_phase(model, train_loader, val_loader, criterion, optimizer,
-                scheduler, device, epochs, phase_name, best_val_acc):
+                scheduler, device, epochs, phase_name, best_val_acc, history):
     import torch
 
     print("\n" + "=" * 55)
@@ -122,9 +127,17 @@ def train_phase(model, train_loader, val_loader, criterion, optimizer,
         scheduler.step()
         val_acc = evaluate_accuracy(model, val_loader, device)
         train_acc = correct / total if total else 0.0
+        average_loss = total_loss / len(train_loader)
+        history.append({
+            "epoch": len(history) + 1,
+            "phase": phase_name.split(":", 1)[0],
+            "loss": average_loss,
+            "train_accuracy": train_acc,
+            "validation_accuracy": val_acc,
+        })
         print(
             f"  Epoch {epoch + 1}/{epochs} | "
-            f"Loss: {total_loss / len(train_loader):.4f} | "
+            f"Loss: {average_loss:.4f} | "
             f"Train acc: {train_acc:.3f} | Val acc: {val_acc:.3f}"
         )
         if val_acc > best_val_acc:
@@ -186,10 +199,11 @@ def run_training():
         model.classifier.parameters(), lr=LR_HEAD, weight_decay=WEIGHT_DECAY
     )
     scheduler = CosineAnnealingLR(optimizer, T_max=EPOCHS_PHASE1)
+    history = []
     best_val_acc = train_phase(
         model, train_loader, val_loader, criterion, optimizer, scheduler,
         device, EPOCHS_PHASE1,
-        "PHASE 1: Training classifier head (backbone frozen)", -1.0,
+        "PHASE 1: Training classifier head (backbone frozen)", -1.0, history,
     )
 
     # Phase 2: fine-tune the final three MobileNetV2 feature blocks.
@@ -213,8 +227,9 @@ def run_training():
     best_val_acc = train_phase(
         model, train_loader, val_loader, criterion, optimizer, scheduler,
         device, EPOCHS_PHASE2,
-        "PHASE 2: Fine-tuning last 3 backbone blocks", best_val_acc,
+        "PHASE 2: Fine-tuning last 3 backbone blocks", best_val_acc, history,
     )
+    save_training_history(history, "mobilenet_v2")
     print(f"\nBest validation accuracy: {best_val_acc:.3f}")
     print(f"Model saved to: {MODEL_PATH}")
 
@@ -269,6 +284,7 @@ def run_evaluation():
     print("        " + "  ".join(f"{name[:4]:>6}" for name in CLASSES))
     for class_name, row in zip(CLASSES, matrix):
         print(f"{class_name:<12}" + "  ".join(f"{value:>6}" for value in row))
+    save_evaluation_plots(all_labels, all_predictions, CLASSES, "mobilenet_v2")
 
 
 def main():

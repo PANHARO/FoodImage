@@ -18,6 +18,11 @@ import numpy as np
 from PIL import Image
 from collections import Counter
 
+try:
+    from .metrics import save_evaluation_plots, save_training_history
+except ImportError:  # Support: python trained_models/efficientnet_setup.py
+    from metrics import save_evaluation_plots, save_training_history
+
 # ─────────────────────────────────────────────
 # STEP 1 — DATASET CLEANUP
 # ─────────────────────────────────────────────
@@ -174,6 +179,7 @@ LR_FINETUNE   = 1e-4   # Phase 2: unfrozen last blocks
 EPOCHS_PHASE1 = 5      # Train head with frozen backbone
 EPOCHS_PHASE2 = 25     # Fine-tune with unfrozen last 3 blocks
 WEIGHT_DECAY  = 1e-4
+MODEL_PATH = "trained_models/checkpoints/best_model.pth"
 
 
 def get_device(require_cuda=False):
@@ -249,8 +255,6 @@ def run_training():
                               num_workers=4, pin_memory=True)
     val_loader   = DataLoader(val_ds,   batch_size=BATCH_SIZE, shuffle=False,
                               num_workers=4, pin_memory=True)
-    test_loader  = DataLoader(test_ds,  batch_size=BATCH_SIZE, shuffle=False,
-                              num_workers=4, pin_memory=True)
 
     # ── Model ────────────────────────────────────────────────────────────
     # Load pretrained EfficientNet-B0
@@ -293,6 +297,7 @@ def run_training():
     scheduler = CosineAnnealingLR(optimizer, T_max=EPOCHS_PHASE1)
 
     best_val_acc = 0.0
+    history = []
     for epoch in range(EPOCHS_PHASE1):
         model.train()
         total_loss, correct, total = 0, 0, 0
@@ -309,12 +314,21 @@ def run_training():
         scheduler.step()
 
         val_acc = evaluate(model, val_loader, device)
+        average_loss = total_loss / len(train_loader)
+        train_acc = correct / total
+        history.append({
+            "epoch": len(history) + 1,
+            "phase": "PHASE 1",
+            "loss": average_loss,
+            "train_accuracy": train_acc,
+            "validation_accuracy": val_acc,
+        })
         print(f"  Epoch {epoch+1}/{EPOCHS_PHASE1} | "
-              f"Loss: {total_loss/len(train_loader):.4f} | "
-              f"Train acc: {correct/total:.3f} | Val acc: {val_acc:.3f}")
+              f"Loss: {average_loss:.4f} | "
+              f"Train acc: {train_acc:.3f} | Val acc: {val_acc:.3f}")
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            torch.save(model.state_dict(), "best_model.pth")
+            torch.save(model.state_dict(), MODEL_PATH)
 
     # ════════════════════════════════════════════════════════════════════
     # PHASE 2: Unfreeze last 3 blocks of backbone + fine-tune
@@ -357,16 +371,26 @@ def run_training():
         scheduler.step()
 
         val_acc = evaluate(model, val_loader, device)
+        average_loss = total_loss / len(train_loader)
+        train_acc = correct / total
+        history.append({
+            "epoch": len(history) + 1,
+            "phase": "PHASE 2",
+            "loss": average_loss,
+            "train_accuracy": train_acc,
+            "validation_accuracy": val_acc,
+        })
         print(f"  Epoch {epoch+1}/{EPOCHS_PHASE2} | "
-              f"Loss: {total_loss/len(train_loader):.4f} | "
-              f"Train acc: {correct/total:.3f} | Val acc: {val_acc:.3f}")
+              f"Loss: {average_loss:.4f} | "
+              f"Train acc: {train_acc:.3f} | Val acc: {val_acc:.3f}")
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            torch.save(model.state_dict(), "best_model.pth")
+            torch.save(model.state_dict(), MODEL_PATH)
             print(f"    ✓ Saved new best model (val acc: {val_acc:.3f})")
 
     print(f"\nBest validation accuracy: {best_val_acc:.3f}")
-    print("Model saved to: best_model.pth")
+    print(f"Model saved to: {MODEL_PATH}")
+    save_training_history(history, "efficientnet_b0")
 
 
 def evaluate(model, loader, device):
@@ -409,7 +433,9 @@ def run_evaluation():
         nn.Dropout(p=0.3, inplace=True),
         nn.Linear(in_features, 10)
     )
-    model.load_state_dict(torch.load("best_model.pth", map_location=device))
+    model.load_state_dict(
+        torch.load(MODEL_PATH, map_location=device, weights_only=True)
+    )
     model = model.to(device)
     model.eval()
 
@@ -429,6 +455,7 @@ def run_evaluation():
     print("        " + "  ".join(f"{c[:4]:>6}" for c in CLASSES))
     for i, row in enumerate(cm):
         print(f"{CLASSES[i]:<12}" + "  ".join(f"{v:>6}" for v in row))
+    save_evaluation_plots(all_labels, all_preds, CLASSES, "efficientnet_b0")
 
 
 # ─────────────────────────────────────────────
