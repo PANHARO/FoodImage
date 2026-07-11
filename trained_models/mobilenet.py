@@ -154,7 +154,8 @@ def run_training():
     from torch.utils.data import DataLoader, WeightedRandomSampler
     from torchvision import datasets, models
 
-    device = get_device(require_cuda=True)
+    # Prefer CUDA, but allow training on CPU when no compatible GPU is found.
+    device = get_device(require_cuda=False)
     train_transforms, eval_transforms = build_transforms()
     train_dataset = datasets.ImageFolder(
         DATA_ROOT / "train", transform=train_transforms
@@ -178,7 +179,7 @@ def run_training():
     loader_options = {
         "batch_size": BATCH_SIZE,
         "num_workers": NUM_WORKERS,
-        "pin_memory": True,
+        "pin_memory": device.type == "cuda",
     }
     train_loader = DataLoader(train_dataset, sampler=sampler, **loader_options)
     val_loader = DataLoader(val_dataset, shuffle=False, **loader_options)

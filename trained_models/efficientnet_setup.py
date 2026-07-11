@@ -203,7 +203,8 @@ def run_training():
     from torchvision import datasets, transforms, models
     from torch.optim.lr_scheduler import CosineAnnealingLR
 
-    device = get_device(require_cuda=True)
+    # Prefer CUDA, but allow training on CPU when no compatible GPU is found.
+    device = get_device(require_cuda=False)
 
     # ── Transforms ──────────────────────────────────────────────────────
     # Images are already 224x224 so no resize needed in eval.
@@ -251,10 +252,11 @@ def run_training():
         replacement=True
     )
 
+    pin_memory = device.type == "cuda"
     train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, sampler=sampler,
-                              num_workers=4, pin_memory=True)
+                              num_workers=4, pin_memory=pin_memory)
     val_loader   = DataLoader(val_ds,   batch_size=BATCH_SIZE, shuffle=False,
-                              num_workers=4, pin_memory=True)
+                              num_workers=4, pin_memory=pin_memory)
 
     # ── Model ────────────────────────────────────────────────────────────
     # Load pretrained EfficientNet-B0
