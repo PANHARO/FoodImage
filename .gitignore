@@ -4,7 +4,6 @@ __pycache__/
 *.py[cod]
 *.pth
 !trained_models/checkpoints/*.pth
-reports/plots/
 
 # Local dataset acquisition helper and OS metadata
 .laphet_thoke_staging/
