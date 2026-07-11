@@ -1,0 +1,92 @@
+dish,ingredient,quantity_g
+pho,rice noodles (cooked),180
+pho,beef (lean),80
+pho,beef broth,400
+pho,bean sprouts,40
+pho,onion,30
+pho,scallion,10
+pho,thai basil,5
+pho,lime juice,10
+pho,fish sauce,10
+banh_mi,baguette,150
+banh_mi,pork (lean),70
+banh_mi,pate,25
+banh_mi,mayonnaise,15
+banh_mi,pickled carrot and daikon,40
+banh_mi,cucumber,30
+banh_mi,cilantro,5
+banh_mi,chili pepper,5
+pad_thai,rice noodles (cooked),180
+pad_thai,shrimp,80
+pad_thai,egg,50
+pad_thai,tofu,40
+pad_thai,bean sprouts,50
+pad_thai,peanuts,20
+pad_thai,tamarind paste,20
+pad_thai,fish sauce,15
+pad_thai,palm sugar,15
+pad_thai,vegetable oil,15
+pad_thai,scallion,10
+pad_thai,lime,20
+nasi_goreng,jasmine rice (cooked),250
+nasi_goreng,chicken thigh,70
+nasi_goreng,egg,50
+nasi_goreng,kecap manis (sweet soy),20
+nasi_goreng,sambal,15
+nasi_goreng,shallot,20
+nasi_goreng,garlic,10
+nasi_goreng,vegetable oil,15
+nasi_goreng,cucumber,30
+nasi_goreng,fried shallots,10
+satay,chicken thigh,150
+satay,satay peanut sauce,60
+satay,jasmine rice (cooked),100
+satay,cucumber,30
+satay,onion,20
+satay,vegetable oil,10
+laksa,rice noodles (cooked),180
+laksa,laksa paste,50
+laksa,coconut milk,150
+laksa,shrimp,60
+laksa,tofu,40
+laksa,bean sprouts,40
+laksa,fish broth,250
+laksa,egg,50
+laksa,lime,15
+hainanese_chicken_rice,chicken breast,150
+hainanese_chicken_rice,jasmine rice (cooked),250
+hainanese_chicken_rice,chicken broth,200
+hainanese_chicken_rice,cucumber,40
+hainanese_chicken_rice,ginger,10
+hainanese_chicken_rice,garlic,8
+hainanese_chicken_rice,scallion,10
+hainanese_chicken_rice,soy sauce,10
+hainanese_chicken_rice,sesame oil,5
+adobo,chicken thigh,180
+adobo,adobo sauce (soy-vinegar),60
+adobo,garlic,10
+adobo,bay leaf,1
+adobo,black pepper,2
+adobo,vegetable oil,10
+adobo,jasmine rice (cooked),200
+amok_trey,white fish,150
+amok_trey,coconut cream,100
+amok_trey,kroeung paste,40
+amok_trey,egg,25
+amok_trey,fish sauce,10
+amok_trey,palm sugar,8
+amok_trey,morning glory (water spinach),30
+amok_trey,banana leaf,5
+amok_trey,jasmine rice (cooked),200
+laphet_thoke,fermented tea leaves (laphet),50
+laphet_thoke,cabbage,80
+laphet_thoke,tomato,60
+laphet_thoke,peanuts,25
+laphet_thoke,fried broad beans,20
+laphet_thoke,sesame seeds (toasted),10
+laphet_thoke,fried garlic chips,10
+laphet_thoke,dried shrimp,10
+laphet_thoke,fish sauce,8
+laphet_thoke,lime juice,10
+laphet_thoke,peanut oil,12
+laphet_thoke,chili pepper,5

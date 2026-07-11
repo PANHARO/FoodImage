@@ -1,0 +1,82 @@
+{
+  "inference": "TTA-4view",
+  "accuracy": 0.811704834605598,
+  "precision_macro": 0.8041861400757595,
+  "recall_macro": 0.7818965733886418,
+  "f1_macro": 0.7859874226553962,
+  "per_class": {
+    "adobo": {
+      "precision": 0.8260869565217391,
+      "recall": 0.926829268292683,
+      "f1-score": 0.8735632183908046,
+      "support": 41.0
+    },
+    "amok_trey": {
+      "precision": 0.8636363636363636,
+      "recall": 0.5428571428571428,
+      "f1-score": 0.6666666666666666,
+      "support": 35.0
+    },
+    "banh_mi": {
+      "precision": 0.9512195121951219,
+      "recall": 0.9069767441860465,
+      "f1-score": 0.9285714285714286,
+      "support": 43.0
+    },
+    "hainanese_chicken_rice": {
+      "precision": 0.7435897435897436,
+      "recall": 0.7435897435897436,
+      "f1-score": 0.7435897435897436,
+      "support": 39.0
+    },
+    "laksa": {
+      "precision": 0.7551020408163265,
+      "recall": 0.8604651162790697,
+      "f1-score": 0.8043478260869565,
+      "support": 43.0
+    },
+    "laphet_thoke": {
+      "precision": 0.6363636363636364,
+      "recall": 0.5,
+      "f1-score": 0.56,
+      "support": 14.0
+    },
+    "nasi_goreng": {
+      "precision": 0.8604651162790697,
+      "recall": 0.8604651162790697,
+      "f1-score": 0.8604651162790697,
+      "support": 43.0
+    },
+    "pad_thai": {
+      "precision": 0.8387096774193549,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.7428571428571429,
+      "support": 39.0
+    },
+    "pho": {
+      "precision": 0.7735849056603774,
+      "recall": 0.8723404255319149,
+      "f1-score": 0.82,
+      "support": 47.0
+    },
+    "satay": {
+      "precision": 0.7931034482758621,
+      "recall": 0.9387755102040817,
+      "f1-score": 0.8598130841121495,
+      "support": 49.0
+    },
+    "accuracy": 0.811704834605598,
+    "macro avg": {
+      "precision": 0.8041861400757595,
+      "recall": 0.7818965733886418,
+      "f1-score": 0.7859874226553962,
+      "support": 393.0
+    },
+    "weighted avg": {
+      "precision": 0.8150330600105778,
+      "recall": 0.811704834605598,
+      "f1-score": 0.8069903891363635,
+      "support": 393.0
+    }
+  }
+}
