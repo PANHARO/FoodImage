@@ -1,6 +1,0 @@
-path: /home/claude/ingredient_det
-train: train/images
-val: valid/images
-test: test/images
-nc: 15
-names: ['bay_leaves', 'bread', 'chicken_piece', 'cucumber_slice', 'egg', 'fish_meat', 'lime_wedge', 'meat_piece', 'noodle', 'peanut', 'pork_piece', 'potato', 'rice', 'satay_skewer', 'shrimp']
