@@ -119,6 +119,7 @@ BLOCKED_TERMS = (
 
 
 def request_bytes(url, timeout=30, max_bytes=15_000_000):
+    """Download binary image data while enforcing a maximum size."""
     url = urllib.parse.quote(
         url, safe=":/?&=%#[]@!$'()*+,;~"
     )
@@ -140,12 +141,14 @@ def request_bytes(url, timeout=30, max_bytes=15_000_000):
 
 
 def request_text(url, timeout=30):
+    """Download a URL and decode its response as UTF-8 text."""
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=timeout) as response:
         return response.read().decode("utf-8", "ignore")
 
 
 def openverse_candidates(pages_per_query):
+    """Yield unique image candidates returned by Openverse searches."""
     endpoint = "https://api.openverse.org/v1/images/"
     seen_urls = set()
     for query in SEARCH_QUERIES:
@@ -192,6 +195,7 @@ def openverse_candidates(pages_per_query):
 
 
 def bing_candidates(pages_per_query):
+    """Yield unique image candidates scraped from Bing image searches."""
     endpoint = "https://www.bing.com/images/async"
     seen_urls = set()
     for query in SEARCH_QUERIES:
@@ -238,6 +242,7 @@ def bing_candidates(pages_per_query):
 
 
 def duckduckgo_candidates(pages_per_query):
+    """Yield unique image candidates returned by DuckDuckGo searches."""
     seen_urls = set()
     browser_headers = {
         "User-Agent": (
@@ -308,6 +313,7 @@ def duckduckgo_candidates(pages_per_query):
 
 
 def candidate_is_relevant(candidate):
+    """Check candidate metadata against allowed and blocked terms."""
     parsed = urllib.parse.urlsplit(candidate["image_url"])
     domain = parsed.netloc.lower().removeprefix("www.")
     if domain in BLOCKED_DOMAINS:
@@ -323,6 +329,7 @@ def candidate_is_relevant(candidate):
 
 
 def difference_hash(image):
+    """Create a perceptual difference hash for duplicate detection."""
     gray = image.resize((9, 8), Image.Resampling.LANCZOS).convert("L")
     pixels = list(gray.get_flattened_data())
     value = 0
@@ -335,6 +342,7 @@ def difference_hash(image):
 
 
 def normalize_candidate(candidate, quality):
+    """Download, validate, resize, encode, and hash one candidate image."""
     try:
         raw = request_bytes(candidate["image_url"])
         with Image.open(io.BytesIO(raw)) as opened:
@@ -384,6 +392,7 @@ def normalize_candidate(candidate, quality):
 
 
 def is_near_duplicate(candidate_hash, accepted_hashes, max_distance=3):
+    """Check whether a perceptual hash closely matches an accepted image."""
     return any(
         (candidate_hash ^ existing_hash).bit_count() <= max_distance
         for existing_hash in accepted_hashes
@@ -391,6 +400,7 @@ def is_near_duplicate(candidate_hash, accepted_hashes, max_distance=3):
 
 
 def collect_images(target, pages_per_query, workers, quality):
+    """Search and stage the requested number of valid unique images."""
     if STAGING_ROOT.exists():
         shutil.rmtree(STAGING_ROOT)
     image_stage = STAGING_ROOT / "images"
@@ -458,6 +468,7 @@ def collect_images(target, pages_per_query, workers, quality):
 
 
 def replace_dataset(records, seed):
+    """Replace Mohinga with Laphet Thoke and assign dataset splits."""
     random.Random(seed).shuffle(records)
     total = len(records)
     train_count = round(total * 0.8)
@@ -522,6 +533,7 @@ def replace_dataset(records, seed):
 
 
 def update_csv_files(dataset_rows, source_rows):
+    """Update split, per-class, and image-source CSV metadata files."""
     CSV_ROOT.mkdir(exist_ok=True)
     by_split = {
         split: [row for row in dataset_rows if row["split"] == split]
@@ -561,6 +573,7 @@ def update_csv_files(dataset_rows, source_rows):
 
 
 def main():
+    """Parse command-line options and run the dataset replacement workflow."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--target", type=int, default=480)
     parser.add_argument("--pages-per-query", type=int, default=15)
