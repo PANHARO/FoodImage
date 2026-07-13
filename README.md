@@ -7,7 +7,7 @@ Asian food dataset.
 
 - `dataset/` - classification images split into `train`, `val`, and `test`
 - `SEA_food_detection_cleaned_yolov11/` - YOLO images, labels, and `data.yaml`
-- `trained_models/` - model scripts, shared graph utilities, and `checkpoints/`
+- `trained_models/` - model packages, shared graph utilities, and `checkpoints/`
 - `reports/` - text reports and generated model statistics
 - `logs/` - training logs
 - `download_laphet_thoke.py` - builds the Laphet Thoke classification class
@@ -16,11 +16,15 @@ Asian food dataset.
 ## Model commands
 
 ```powershell
-python trained_models/mobilenet.py --train
-python trained_models/mobilenet.py --evaluate
-python trained_models/efficientnet_setup.py --train
-python trained_models/efficientnet_setup.py --evaluate
+python -m trained_models.mobilenet.cli --train
+python -m trained_models.mobilenet.cli --evaluate
+python -m trained_models.efficientnet.cli --train
+python -m trained_models.efficientnet.cli --evaluate
 ```
+
+The previous entry points still work:
+`python trained_models/mobilenet.py --train` and
+`python trained_models/efficientnet_setup.py --train`.
 
 Training creates an epoch-loss/accuracy graph and CSV. Evaluation creates a
 normalized confusion matrix plus per-class precision, recall, and F1 graphs.
