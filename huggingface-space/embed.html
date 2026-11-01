@@ -1,0 +1,80 @@
+<!-- Replace BOTH placeholder URLs with the exact URL from "Embed this Space". -->
+<section class="food-demo" aria-labelledby="food-demo-title">
+  <div class="food-demo__intro">
+    <p class="food-demo__eyebrow">RO / ZENPAI · MACHINE LEARNING</p>
+    <h2 id="food-demo-title">A taste of Southeast Asia.</h2>
+    <p>Try my food-recognition model with a photo of your own.</p>
+  </div>
+
+  <p class="food-demo__wake" id="food-demo-wake" role="note">
+    <span aria-hidden="true">●</span>
+    Waking up the model... Free Spaces sleep when idle, so the first visit may
+    take a moment.
+  </p>
+
+  <iframe
+    src="https://YOUR-SPACE-SUBDOMAIN.hf.space/?__theme=dark"
+    title="Ro / Zenpai — Southeast Asian food recognition demo"
+    width="100%"
+    height="1080"
+    loading="lazy"
+    aria-describedby="food-demo-wake"
+  ></iframe>
+
+  <a
+    class="food-demo__link"
+    href="https://YOUR-SPACE-SUBDOMAIN.hf.space/?__theme=dark"
+    target="_blank"
+    rel="noopener noreferrer"
+  >Open demo in a new tab ↗</a>
+</section>
+
+<style>
+  .food-demo {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 48px 20px;
+    background: #080808;
+    color: #eff5f1;
+    font-family: inherit;
+  }
+  .food-demo__eyebrow {
+    color: #59e0a0;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+  }
+  .food-demo h2 {
+    margin: 12px 0;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+  .food-demo__intro > p:last-child { color: #aab5ae; }
+  .food-demo__wake {
+    padding: 12px 16px;
+    border: 1px solid #29332c;
+    border-radius: 12px;
+    color: #aab5ae;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .food-demo__wake span { color: #59e0a0; margin-right: 6px; }
+  .food-demo iframe {
+    display: block;
+    width: 100%;
+    border: 1px solid #29332c;
+    border-radius: 16px;
+    background: #080808;
+  }
+  .food-demo__link {
+    display: inline-block;
+    margin-top: 14px;
+    color: #59e0a0;
+    text-underline-offset: 4px;
+  }
+  .food-demo__link:focus-visible { outline: 2px solid #59e0a0; outline-offset: 4px; }
+  @media (max-width: 640px) {
+    .food-demo { padding: 32px 12px; }
+    .food-demo iframe { height: 1420px; }
+  }
+</style>
