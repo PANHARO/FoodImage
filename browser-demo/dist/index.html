@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Ten Southeast Asian dishes. One photo. Try Ro / Zenpai's trained food-recognition model directly in your browser.">
+  <title>SEA Food Recognition · Ro / Zenpai</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="brand" href="./" aria-label="Ro / Zenpai home"><span class="brand-mark">z<span>.</span></span><span>RO <span class="slash">/</span> ZENPAI</span></a>
+    <a class="source-link" href="https://github.com/PANHARO/FoodImage/tree/feat/gradio-food-space" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="wrap">
+    <section class="intro" aria-labelledby="title">
+      <div>
+        <p class="eyebrow"><span class="small-dot"></span> AN EXPERIMENT IN COMPUTER VISION</p>
+        <h1 id="title">A taste of<br><span>Southeast Asia.</span></h1>
+        <p class="intro-copy">Ten dishes. One photo. Discover what my food-recognition<br class="desktop-break"> model sees in your next meal.</p>
+      </div>
+      <div class="intro-note"><span class="note-index">01 — LIVE DEMO</span><p>Built with curiosity.<br>Made in Phnom Penh.</p><span class="note-bottom">EfficientNet-B0 <span aria-hidden="true">↘</span></span></div>
+    </section>
+
+    <section class="demo" aria-label="Food recognition demo">
+      <div class="demo-header">
+        <span>SEA FOOD RECOGNITION</span>
+        <span id="model-status" class="status" role="status"><span class="status-dot"></span><span id="status-text">Loading model…</span></span>
+      </div>
+      <div class="demo-grid">
+        <div class="input-panel">
+          <div class="panel-heading"><h2><span>01</span> Your photo</h2><button id="clear" class="clear" disabled>Clear <span aria-hidden="true">×</span></button></div>
+          <input type="file" id="photo" accept="image/jpeg,image/png,image/webp,image/bmp" hidden>
+          <button id="upload" class="upload" aria-label="Choose a food photo">
+            <img id="preview" alt="Your selected food photo" hidden>
+            <span id="drop-prompt" class="drop-prompt">
+              <span class="upload-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><rect x="7" y="7" width="34" height="34" rx="7"/><circle cx="18" cy="18" r="3"/><path d="m8 33 10-9 7 6 5-5 11 10"/></svg></span>
+              <strong>What’s on your plate?</strong>
+              <span>Drop a food photo here, or <u>browse files</u></span>
+              <small>JPG, PNG or WebP · up to 20 MB</small>
+            </span>
+            <span id="change-photo" class="change-photo" hidden>Change photo ↗</span>
+          </button>
+          <p class="privacy"><svg aria-hidden="true" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="7" width="9" height="7" rx="2"/><path d="M5.5 7V4.5a2.5 2.5 0 0 1 5 0V7"/></svg> Your photo stays on your device.</p>
+        </div>
+        <div class="output-panel">
+          <div class="panel-heading"><h2><span>02</span> The prediction</h2><span class="tiny-label">TOP 3</span></div>
+          <div id="result" role="status" aria-live="polite" aria-atomic="true">
+            <div class="idle-mark" aria-hidden="true">✳</div>
+            <p class="result-kicker" id="result-kicker">A LITTLE FOOD FOR THOUGHT</p>
+            <h3 id="dish">Ready when you are.</h3>
+            <p id="result-message">Add a photo or choose an example below.<br>Let’s see what’s cooking.</p>
+            <div id="confidence" class="confidence" hidden><span id="confidence-value"></span><small>model confidence</small></div>
+            <div id="bars" class="bars" hidden></div>
+            <p id="timing" class="timing" hidden></p>
+          </div>
+          <p class="model-note">Trained on 10 dishes. Unfamiliar food can still receive a high score.</p>
+        </div>
+      </div>
+      <div class="examples">
+        <div class="examples-heading"><span>OR TAKE A TASTE</span><span>Choose an example <span aria-hidden="true">↙</span></span></div>
+        <div class="example-grid">
+          <button class="example" data-dish="adobo"><img src="examples/adobo.jpg" alt="A plate of adobo" width="224" height="224"><span>Adobo <span aria-hidden="true">↗</span></span></button>
+          <button class="example" data-dish="amok_trey"><img src="examples/amok_trey.jpg" alt="Amok trey in a banana leaf bowl" width="224" height="224"><span>Amok trey <span aria-hidden="true">↗</span></span></button>
+          <button class="example" data-dish="banh_mi"><img src="examples/banh_mi.jpg" alt="A banh mi sandwich" width="224" height="224"><span>Banh mi <span aria-hidden="true">↗</span></span></button>
+          <button class="example" data-dish="pho"><img src="examples/pho.jpg" alt="A bowl of pho" width="224" height="224"><span>Pho <span aria-hidden="true">↗</span></span></button>
+          <button class="example" data-dish="satay"><img src="examples/satay.jpg" alt="Satay skewers and sauce" width="224" height="224"><span>Satay <span aria-hidden="true">↗</span></span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="known" aria-labelledby="known-title">
+      <h2 id="known-title">A small menu.<br><span>A regional story.</span></h2>
+      <div><p>This model knows these ten Southeast Asian dishes:</p><div class="dish-list" id="dish-list"></div></div>
+    </section>
+    <details class="about">
+      <summary>Behind the experiment <span aria-hidden="true">+</span></summary>
+      <div class="about-content"><p>A portfolio experiment by <strong>Ro / Zenpai</strong>, an IT & CS student in Phnom Penh. The classifier comes from Group 3’s <em>Deep Learning-Based Southeast Asian Food Recognition and Nutritional Estimation</em> project for ITM-390: Machine Learning.</p><p><strong>Reported best validation accuracy: 81.7%.</strong> Reported test accuracy: 82% on 415 photos. These are historical project results, not a new evaluation of this browser version. The supplied checkpoint’s filename differs from the training log.</p><p>Below 50% confidence, the model says “Not sure.” The original 224 × 224 resize and normalization are preserved. Browser image decoding can cause small differences in scores.</p><p><a href="https://github.com/PANHARO/FoodImage/blob/master/logs/efficientnet.log" target="_blank" rel="noopener noreferrer">Training results ↗</a><a href="https://github.com/aurora-llin/SEA-cuisine-Nutrition-estimation" target="_blank" rel="noopener noreferrer">Original project ↗</a><a href="https://www.canva.com/design/DAHOw_Ia42M/SAQgi9TKEnQeDsP9ovge1g/edit" target="_blank" rel="noopener noreferrer">Project presentation ↗</a></p></div>
+    </details>
+  </main>
+  <footer class="wrap"><span>RO / ZENPAI <span class="footer-dot">·</span> PHNOM PENH</span><span>Built to learn. Shared to explore.</span></footer>
+</body>
+</html>
