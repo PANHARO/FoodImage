@@ -13,8 +13,8 @@ from torchvision import transforms
 from PIL import Image
 
 SITE = Path(__file__).resolve().parents[1]
-ROOT = SITE.parents[2]
-SOURCE = ROOT / "outputs" / "sea-food-space"
+ROOT = SITE.parent
+SOURCE = ROOT / "huggingface-space"
 WEIGHTS = SOURCE / "model" / "efficientnet-b0.pth"
 assert hashlib.sha256(WEIGHTS.read_bytes()).hexdigest() == "213f7d01da9716fef0e1268ff07b72f3ece4c14db09ae70a3adcad015edb48eb"
 torch.set_num_threads(2)
