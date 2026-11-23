@@ -6,13 +6,13 @@ from pathlib import Path
 if __package__ in (None, ""):
     sys.path.append(str(Path(__file__).resolve().parents[1]))
     from config import (  # type: ignore
-        BATCH_SIZE, CLASSES, DATA_ROOT, MODEL_NAME, MODEL_PATH, NUM_WORKERS,
+        BATCH_SIZE, BUNDLED_MODEL_PATH, CLASSES, DATA_ROOT, MODEL_NAME, MODEL_PATH, NUM_WORKERS,
     )
     from feature_extraction import build_model, get_device  # type: ignore
     from preprocessing import build_transforms, validate_classes  # type: ignore
 else:
     from .config import (
-        BATCH_SIZE, CLASSES, DATA_ROOT, MODEL_NAME, MODEL_PATH, NUM_WORKERS,
+        BATCH_SIZE, BUNDLED_MODEL_PATH, CLASSES, DATA_ROOT, MODEL_NAME, MODEL_PATH, NUM_WORKERS,
     )
     from .feature_extraction import build_model, get_device
     from .preprocessing import build_transforms, validate_classes
@@ -30,8 +30,9 @@ def run_evaluation():
     from torch.utils.data import DataLoader
     from torchvision import datasets
 
-    if not MODEL_PATH.exists():
-        raise FileNotFoundError(f"{MODEL_PATH} does not exist. Train first.")
+    checkpoint = MODEL_PATH if MODEL_PATH.is_file() else BUNDLED_MODEL_PATH
+    if not checkpoint.is_file():
+        raise FileNotFoundError(f"Neither {MODEL_PATH} nor {BUNDLED_MODEL_PATH} exists. Train first.")
     device = get_device()
     _, evaluation_transform = build_transforms()
     test_dataset = datasets.ImageFolder(DATA_ROOT / "test", evaluation_transform)
@@ -41,7 +42,7 @@ def run_evaluation():
         num_workers=NUM_WORKERS, pin_memory=device.type == "cuda",
     )
     model = build_model(weights=None).to(device)
-    model.load_state_dict(torch.load(MODEL_PATH, map_location=device, weights_only=True))
+    model.load_state_dict(torch.load(checkpoint, map_location=device, weights_only=True))
     model.eval()
 
     predictions, labels = [], []

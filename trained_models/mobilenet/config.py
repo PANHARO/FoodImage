@@ -6,6 +6,7 @@ from pathlib import Path
 # Dataset layout and class order must match torchvision.datasets.ImageFolder.
 DATA_ROOT = Path("dataset")
 MODEL_PATH = Path("trained_models/checkpoints/best_mobilenet_v2_model.pth")
+BUNDLED_MODEL_PATH = Path("trained_models/checkpoints/mobilenet_v2_model.pth")
 MODEL_NAME = "mobilenet_v2"
 CLASSES = [
     "adobo", "amok_trey", "banh_mi", "hainanese_chicken_rice", "laksa",

@@ -39,7 +39,7 @@ If your system uses `python3` instead of `python`, use it when creating the envi
 
 The classification dataset must have `dataset/train`, `dataset/val`, and `dataset/test`, each containing the same ten class folders. Keep the class names consistent with the model configuration files.
 
-Choose a model and train it before evaluating the generated checkpoint:
+Choose a model and evaluate it. To train your own checkpoint, run the optional training command first:
 
 ```sh
 python -m trained_models.mobilenet.cli --train
@@ -53,7 +53,7 @@ python -m trained_models.efficientnet.cli --evaluate
 
 Training produces epoch loss/accuracy plots and CSV files. Evaluation produces a normalized confusion matrix and per-class precision, recall, and F1 plots under `reports/plots/mobilenet_v2/` or `reports/plots/efficientnet_b0/`.
 
-**Using the included checkpoints:** the configured evaluation paths currently expect `trained_models/checkpoints/best_mobilenet_v2_model.pth` and `trained_models/checkpoints/best_model.pth`. The included files are named `mobilenet_v2_model.pth` and `efficientnetb0_model.pth`. To evaluate those directly, update `MODEL_PATH` in the corresponding `trained_models/mobilenet/config.py` or `trained_models/efficientnet/config.py` to the matching included file. Otherwise, train first to generate the expected checkpoint.
+Evaluation uses the trained checkpoint when available and otherwise loads the included MobileNetV2 or EfficientNet-B0 checkpoint. Training writes to a separate file and preserves the included weights.
 
 The legacy training entry points also remain available:
 
